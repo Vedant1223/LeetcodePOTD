@@ -1,7 +1,7 @@
 # 🧠 LeetCode Daily Challenge Journal
 
 Welcome to my LeetCode Daily Challenge repository! 🚀  
-Here, I consistently solve one coding problem a day to sharpen my problem-solving and algorithmic thinking skills.
+Here, I consistently solve at least one coding problem a day to sharpen my problem-solving and algorithmic thinking skills.
 
 ---
 
