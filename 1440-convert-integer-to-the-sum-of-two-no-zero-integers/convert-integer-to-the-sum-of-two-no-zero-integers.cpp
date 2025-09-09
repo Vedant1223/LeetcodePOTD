@@ -1,24 +1,13 @@
 class Solution {
 public:
     bool check( int n){
-        if(n/10 == 0){
-            if(n == 0){
+        while(n > 0){
+            if(n % 10 == 0){
                 return false;
             }
-            else{
-                return true;
-            }
+            n  = n/10;
         }
-
-        int a = n/10;
-        int b = n%10;
-        if(b == 0){
-            return false;
-        }
-        else{
-            return check(a);
-        }
-
+        return true;
     }
 
     vector<int> getNoZeroIntegers(int n) {
