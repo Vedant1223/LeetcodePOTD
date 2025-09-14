@@ -1,56 +1,72 @@
 class Solution {
 public:
+    unordered_set<string> exactWords;          // stores original words
+    unordered_map<string, string> caseMap;     // lowercase : original word
+    unordered_map<string, string> vowelMap;    // masked vowels : original word
+    
+    string toLower(const string& s) {
+        string res = s;
+        for (char& c : res) {
+            c = tolower(c);
+        }
+        return res;
+    }
+
+    string maskVowels(const string& s) {
+        string res = s;
+        for (char& c : res) {
+            if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
+                c = '*';
+            }
+        }
+        return res;
+    }
+
+    string checkForMatch(const string& query) {
+        // Exact match
+        if (exactWords.count(query)) {
+            return query;
+        }
+
+        // Case error match
+        string lowerQuery = toLower(query);
+        if (caseMap.count(lowerQuery)) {
+            return caseMap[lowerQuery];
+        }
+
+        // Vowel error match
+        string maskedQuery = maskVowels(lowerQuery);
+        if (vowelMap.count(maskedQuery)) {
+            return vowelMap[maskedQuery];
+        }
+
+        // 4. No match
+        return "";
+    }
+
     vector<string> spellchecker(vector<string>& wordlist, vector<string>& queries) {
-        unordered_set<string> exactMatchSet(wordlist.begin(), wordlist.end());
-        unordered_map<string, string> caseInsensitiveMap;
-        unordered_map<string, string> vowelInsensitiveMap;
+        exactWords.clear();
+        caseMap.clear();
+        vowelMap.clear();
 
-        auto normalizeVowels = [](const string& word) {
-            string res = word;
-            for (char& c : res) {
-                if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
-                    c = '*';
-                }
-            }
-            return res;
-        };
+        for (string word : wordlist) {
+            exactWords.insert(word);
 
-        for (string& word : wordlist) {
-            string lowerWord = word;
-            transform(lowerWord.begin(), lowerWord.end(), lowerWord.begin(), ::tolower);
-
-            if (!caseInsensitiveMap.count(lowerWord)) {
-                caseInsensitiveMap[lowerWord] = word;
+            string lowerWord = toLower(word);
+            if (caseMap.find(lowerWord) == caseMap.end()) { //Add only 1st occurrence
+                caseMap[lowerWord] = word;
             }
 
-            string vowelNormalized = normalizeVowels(lowerWord);
-            if (!vowelInsensitiveMap.count(vowelNormalized)) {
-                vowelInsensitiveMap[vowelNormalized] = word;
+            string maskedWord = maskVowels(lowerWord);
+            if (vowelMap.find(maskedWord) == vowelMap.end()) { //Add only 1st occurrence
+                vowelMap[maskedWord] = word;
             }
         }
 
-        vector<string> results;
-        for (string& query : queries) {
-            if (exactMatchSet.count(query)) {
-                results.push_back(query);
-                continue;
-            }
-
-            string lowerQuery = query;
-            transform(lowerQuery.begin(), lowerQuery.end(), lowerQuery.begin(), ::tolower);
-            if (caseInsensitiveMap.count(lowerQuery)) {
-                results.push_back(caseInsensitiveMap[lowerQuery]);
-                continue;
-            }
-
-            string vowelNormalized = normalizeVowels(lowerQuery);
-            if (vowelInsensitiveMap.count(vowelNormalized)) {
-                results.push_back(vowelInsensitiveMap[vowelNormalized]);
-                continue;
-            }
-
-            results.push_back(""); // No match
+        vector<string> result;
+        for (string query : queries) {
+            result.push_back(checkForMatch(query));
         }
-        return results;
+        return result;
     }
 };
