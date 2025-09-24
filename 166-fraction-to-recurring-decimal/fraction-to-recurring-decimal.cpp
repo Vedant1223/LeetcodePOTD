@@ -1,35 +1,61 @@
 class Solution {
 public:
-    std::string fractionToDecimal(int numerator, int denominator) {
-        if (numerator == 0)
-            return "0";        
+    void putBrackets(int ind, string &s) {
+        // ind = position where the remainder first repeated
+        // put ( at that position and ) at the end
+        s.insert(ind, "(");
+        s.push_back(')');
+    }
 
-        std::string fraction;
-        if ((numerator < 0) ^ (denominator < 0))
-            fraction += "-";        
+    string DenominatorBuilder(long long r, long long d) {
+        unordered_map<long long, int> mp; 
+        string s ="";
+        // first int for the rem  which  will be the key
+        // second int for the index or distance after decimal symbol
 
-        long long dividend = std::llabs((long long)numerator);
-        long long divisor = std::llabs((long long)denominator);
-        fraction += std::to_string(dividend / divisor);
-        long long remainder = dividend % divisor;
-        if (remainder == 0) {
-            return fraction;
-        }
-
-        fraction += ".";
-        std::unordered_map<long long, int> map;
-        while (remainder != 0) {
-            if (map.count(remainder)) {
-                fraction.insert(map[remainder], "(");
-                fraction += ")";
-                break;
+        while(true){
+            if(r == 0){
+                return s; // no loop, end of fraction
             }
-            map[remainder] = fraction.size();
-            remainder *= 10;
-            fraction += std::to_string(remainder / divisor);
-            remainder %= divisor;
-        }
 
-        return fraction;
+            if(mp.find(r) != mp.end()){
+                // element found loop mil gya
+                int ind = mp[r];
+                putBrackets(ind, s);
+                return s;
+            }
+
+            // store remainder with current length of s
+            mp[r] = s.size();
+
+            r *= 10; // now safe in long long
+            int q = r / d;
+            s += to_string(q);
+            r = r % d;
+        }
+        return s;
+    }
+
+    string fractionToDecimal(int numerator, int denominator) {                 
+        if(numerator == 0) return "0";
+
+        string ans = "";
+        // handle negative numbers
+        if((numerator < 0) ^ (denominator < 0)) ans += "-";
+
+        long long n = llabs((long long)numerator);
+        long long d = llabs((long long)denominator);
+
+        // quotient part before decimal
+        long long quotient = (n / d);
+        ans += to_string(quotient);
+
+        long long remainder = n % d;
+        if(remainder != 0){
+            ans +=".";
+            string str = DenominatorBuilder(remainder, d);
+            ans = ans + str;
+        }
+        return ans;
     }
 };
