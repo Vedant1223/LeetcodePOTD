@@ -34,13 +34,27 @@ public:
         return maxi;
     }
 
+    int solveBO(vector<vector<int>>& t, vector<vector<int>>& tab){
+        for(int idx = t.size()-2; idx >= 0; idx--){
+            for(int col = t[idx].size()-1 ; col >= 0; col--){
+
+                tab[idx][col] = t[idx][col] + min(tab[idx+1][col], tab[idx+1][col+1]);
+            
+            }
+        }
+        return tab[0][0];
+    }
+
     int minimumTotal(vector<vector<int>>& triangle) {
         int row = triangle.size();
         int col = triangle[row-1].size();
         
-        vector<vector<int>>tabulation(row, vector<int>(col, INT_MAX));
+        vector<vector<int>>tabulation(row+1, vector<int>(col+1, INT_MAX));
+        
+        for(int i = 0 ; i < col; i++){
+            tabulation[row-1][i] = triangle[row-1][i];
+        }
 
-
-        return solveTB(0, 0, triangle, tabulation);
+        return solveBO(triangle, tabulation);
     }
 };
