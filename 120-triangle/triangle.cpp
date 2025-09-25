@@ -44,17 +44,35 @@ public:
         }
         return tab[0][0];
     }
+    
+    int solveSO(vector<vector<int>>&t, vector<int> &curr, vector<int> &next){
+        for(int idx = t.size()-2; idx >= 0; idx--){
+            for(int col = t[idx].size()-1 ; col >= 0; col--){
+
+                curr[col] = t[idx][col] + min(next[col], next[col+1]);
+            
+            }
+            next = curr;
+        }
+        return next[0];
+    }
 
     int minimumTotal(vector<vector<int>>& triangle) {
         int row = triangle.size();
         int col = triangle[row-1].size();
         
         vector<vector<int>>tabulation(row+1, vector<int>(col+1, INT_MAX));
-        
+    vector<int> next = triangle[row-1];  // last row
+    vector<int> curr(col, 0);           // same size as next
+
+
         for(int i = 0 ; i < col; i++){
+
             tabulation[row-1][i] = triangle[row-1][i];
+            next.push_back(triangle[row-1][i]);
+        
         }
 
-        return solveBO(triangle, tabulation);
+        return solveSO(triangle, curr, next);
     }
 };
