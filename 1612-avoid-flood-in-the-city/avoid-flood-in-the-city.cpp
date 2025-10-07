@@ -35,7 +35,7 @@ vector<int> avoidFlood(vector<int>& rains) {
             int prevDay = lastRain[lake];
 
             
-            auto it = dryDays.upper_bound(prevDay);
+            auto it = dryDays.lower_bound(prevDay);
 
             if (it == dryDays.end()) {
                 
