@@ -5,7 +5,6 @@ public:
 
         int currRun = 1;
         int prevRun = 0;
-        int maxResult = 0;
 
         for( int i = 0; i < n-1; i++ ){
             if(nums[i+1] > nums[i]){
