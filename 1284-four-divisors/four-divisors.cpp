@@ -1,35 +1,31 @@
 class Solution {
 public:
-    vector<int> check(int n){
-        vector<int> v;
-        for(int i = 2; i*i <=n ; i++){
-            if(n % i == 0){
-                v.push_back(i);
-                if(i != n/i){
-                    v.push_back(n/i);
-                }
-            }
-        }
-        return v;
-    }
-
-    int sum(vector<int> v){
-        int sum = 0;
-        for( int i : v){
-            sum+=i;
-        }
-        return sum;
-    }
-
     int sumFourDivisors(vector<int>& nums) {
         int ans = 0;
-        for(int n : nums){
-            vector<int> v = check(n);
-            if(v.size() ==2 ){
-                ans += (1 + n);
-                ans+= sum(v);
+
+        for (int n : nums) {
+            int a = -1, b = -1;
+
+            for (int i = 2; i * i <= n; ++i) {
+                if (n % i == 0) {
+                    if (a != -1) { // second divisor pair found
+                        a = -1;
+                        break;
+                    }
+                    a = i;
+                    b = n / i;
+                    if (a == b) { // perfect square
+                        a = -1;
+                        break;
+                    }
+                }
             }
-        }    
+
+            if (a != -1) {
+                ans += 1 + a + b + n;
+            }
+        }
+
         return ans;
     }
 };
