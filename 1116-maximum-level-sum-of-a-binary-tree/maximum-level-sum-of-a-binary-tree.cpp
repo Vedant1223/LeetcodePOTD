@@ -14,31 +14,40 @@ public:
     int maxLevelSum(TreeNode* root) {
         queue<TreeNode*> q;
         q.push(root);
-        int level=1;
-        int maxi=INT_MIN;
-        int maxlevel=0;
+        q.push(NULL);
+        int sum = 0;
+        int maxi = INT_MIN;
+        int maxLevel = 0;
+        int level = 1;
+
         while(!q.empty()){
-            int sum=0;
-            int sz=q.size();
-            for(int i=0;i<sz;i++){
-               TreeNode* front=q.front();
-               q.pop();
-               sum+=front->val;
-               if(front){
-                 if(front->left){
-                    q.push(front->left);
-                 }
-                 if(front->right){
-                    q.push(front->right);
-                 }
-               }
+            
+            TreeNode* f = q.front();
+            q.pop();
+
+            if(f == NULL){
+                if(maxi < sum){
+                    maxi = sum;
+                    maxLevel = level;
+                }
+                level++;
+                sum = 0;
+                // null dal rkha h
+                if( !q.empty()){
+                    q.push(NULL); 
+                }
             }
-            if(sum>maxi){
-                maxi=sum;
-                maxlevel=level;
+            else{
+                sum += f->val;
+                if(f->left){
+                    q.push(f->left);
+                }
+                if(f->right){
+                    q.push(f->right);
+                }
             }
-            level++;
         }
-        return maxlevel;
+
+        return maxLevel;
     }
 };
