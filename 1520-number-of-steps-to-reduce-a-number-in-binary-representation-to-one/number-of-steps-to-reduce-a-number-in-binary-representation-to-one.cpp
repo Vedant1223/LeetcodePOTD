@@ -1,36 +1,31 @@
 class Solution {
 public:
-    string makeStr(int len){
-        string s = "1";
-        for(int i = 0; i < len; i++){
-            s+='0';
-        }
-        return s;
-    }
     int numSteps(string s) {
+        int len = s.length();
+        int carry = 0;
         int ans = 0;
-        while(s != "1"){
-            int len = s.length();
-            if(s[len-1] == '1'){
-                for(int i = len-2; i >= 0; i--){
-                    if(s[i] == '0'){
-                        s[i] = '1';
-                        s[len-1] = '0';
-                        break;
-                    }
-                    else{
-                        s[i] = '0';
-                    }
-                }
-                if(s[len-1] == '1'){
-                    // case of 111 to 1000
-                    s = makeStr(len);
-                }
-            }else{
-                s.pop_back();
+        for(int i = len-1; i >= 1; i--){
+            if(s[i] == '1' && carry == 1){
+                // even 
+                ans += 1;
+                carry = 1;
             }
-            ans++;
+            else if( s[i] == '1' && carry == 0){
+                // add one thats the odd case
+                ans +=2;
+                carry = 1;
+            }
+            else if(s[i] == '0' && carry == 1){
+                ans +=2;
+                carry = 1;
+            }
+            else{
+                ans+=1;
+            }
         }
+        if(carry == 1){
+            ans ++;
+        }   
         return ans;
     }
 };
