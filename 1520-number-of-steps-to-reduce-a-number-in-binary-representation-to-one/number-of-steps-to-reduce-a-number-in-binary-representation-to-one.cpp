@@ -18,6 +18,9 @@ public:
                         s[len-1] = '0';
                         break;
                     }
+                    else{
+                        s[i] = '0';
+                    }
                 }
                 if(s[len-1] == '1'){
                     // case of 111 to 1000
