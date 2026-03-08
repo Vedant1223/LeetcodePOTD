@@ -1,36 +1,30 @@
 class Solution {
 public:
-    string ans;
-    void generate(int i, int n, string &curr, unordered_map<string,bool> &mp){
-        
-        if(i == n){
-            if(mp.find(curr) == mp.end()){
-                ans = curr;
+    int toNum(string s){
+        int n = 0;
+        for(int i = 0;i < s.size(); i++){
+            if(s[i]=='1'){
+                n += pow(2, i);
             }
-            return;
         }
-
-        // choose 0
-        curr.push_back('0');
-        generate(i+1, n, curr, mp);
-        curr.pop_back();
-
-        // choose 1
-        curr.push_back('1');
-        generate(i+1, n, curr, mp);
-        curr.pop_back();
+        return n;
     }
+
     string findDifferentBinaryString(vector<string>& nums) {
-        unordered_map<string, bool> mp;
+        unordered_set<int> numbers;
         for(auto s : nums){
-            mp[s] = true;
+            numbers.insert(stoi(s, 0, 2));
         }
 
-        int len = nums[0].length();
-        string curr="";
-        
-        generate(0, len, curr, mp);
-        return ans;
-        // generator function for len 
+        string result = "";
+    int n = nums.size();
+        for(int i = 0; i <= nums.size(); i++){
+            
+            if(numbers.find(i) == numbers.end()){
+                result = bitset<16>(i).to_string();
+                return result.substr(16-n, n);
+            }
+        }
+        return "";
     }
 };
