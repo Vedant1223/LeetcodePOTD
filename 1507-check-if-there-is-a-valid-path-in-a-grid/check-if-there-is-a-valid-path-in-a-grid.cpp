@@ -3,7 +3,6 @@ public:
     int m;
     int n;
 
-    vector<vector<int>> dir = {{1, 0}, {-1, 0}, {0, -1}, {0, 1}};
 
     vector<vector<pair<int, int>>> pathType = {
         {{0, 1}, {0, -1}}, {{-1, 0}, {1, 0}},  {{1, 0}, {0, -1}},
