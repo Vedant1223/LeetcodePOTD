@@ -1,26 +1,25 @@
 class Solution {
 public:
-
-    int findFinishTime(vector<int>& start1, vector<int>& duration1, vector<int>& start2, vector<int>& duration2) {
-
-        int finish1 = INT_MAX;
-        for (int i = 0; i < start1.size(); i++) {
-            finish1 = min(finish1, start1[i] + duration1[i]);
-        }
-
-        int finish2 = INT_MAX;
-        for (int i = 0; i < start2.size(); i++) {
-            finish2 = min(finish2, max(finish1, start2[i]) + duration2[i]);
-        }
-
-        return finish2;
-    }
-
     int earliestFinishTime(vector<int>& landStartTime, vector<int>& landDuration, vector<int>& waterStartTime, vector<int>& waterDuration) {
-        int pehleLand_FirWater = findFinishTime(landStartTime, landDuration, waterStartTime, waterDuration);
+        int miniFirst = INT_MAX;
+        for(int i = 0; i < landDuration.size(); i++){
+            miniFirst = min(miniFirst, landStartTime[i] + landDuration[i]);
+        }
+        int ans = INT_MAX;
 
-        int pehleWater_FirLand = findFinishTime(waterStartTime, waterDuration, landStartTime, landDuration);
+        int miniSec = INT_MAX;
+        for( int i  = 0; i < waterDuration.size();i++){
+            miniSec = min(miniSec, waterStartTime[i]+ waterDuration[i]);
+           
+                ans = min(ans,  max(waterStartTime[i], miniFirst) + waterDuration[i] );
+            
+        }    
+        for( int i = 0; i < landDuration.size(); i++){
+            
+                ans = min(ans, max(landStartTime[i], miniSec) + landDuration[i]);
 
-        return min(pehleLand_FirWater, pehleWater_FirLand);
+        }
+
+        return ans;
     }
 };
