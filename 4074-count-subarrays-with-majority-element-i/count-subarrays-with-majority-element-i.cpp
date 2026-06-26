@@ -10,8 +10,10 @@ public:
                 if(nums[j] == target){
                     count++;
                 }
-                int len = j - i + 1;
-                if(count > len/2){
+                else{
+                    count--;
+                }
+                if(count > 0){
                     ans++;
                 }
             }
